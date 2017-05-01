@@ -17,6 +17,7 @@ public class Driver {
 	static ArrayList <Long> timeh1 = new ArrayList<Long>(); 
 	static HashMap<Integer, Long> averageTimeh2 = new HashMap<Integer,Long>();
 	static ArrayList <Long> timeh2 = new ArrayList<Long>(); 
+	static int step; 
 
 	public static int[] randomInput(){
 		ArrayList<Integer> list = new ArrayList<Integer>();
@@ -30,7 +31,7 @@ public class Driver {
 		list.add(7);
 		list.add(8);
 		Collections.shuffle(list);
-		System.out.println(list);
+		//System.out.println(list);
 		int [] a = new int[9];
 		for(int i =0 ; i < 9; i++){
 			a[i]=list.get(i);
@@ -96,14 +97,14 @@ public class Driver {
 						totalTime+=l;
 					}
 
-					System.out.println("Total time " + totalTime );
+					//System.out.println("Total time " + totalTime );
 					averageTimeh1.put(depth, totalTime/timeh1.size());
-					 totalTime =(long) 0; 
+					totalTime =(long) 0; 
 					for(long l: timeh2){
 						totalTime+=l;
 					}
 
-					System.out.println("Total time " + totalTime );
+					//System.out.println("Total time " + totalTime );
 					averageTimeh2.put(depth, totalTime/timeh2.size());
 				}
 				depth = Integer.parseInt(s[1]);
@@ -118,16 +119,12 @@ public class Driver {
 
 
 				}
-				for (int i : a){
-					System.out.print(i );
-				}
-				System.out.println();
 				runh1(a);
 				timeh1.add(System.currentTimeMillis()-startTime);
 				startTime =System.currentTimeMillis();
 				runh2(a);
 				timeh2.add(System.currentTimeMillis()-startTime);
-				
+
 			}
 		}
 		if (depth!=0){
@@ -137,7 +134,7 @@ public class Driver {
 				totalTime+=l;
 			}
 			averageTimeh1.put(depth, totalTime/timeh1.size());
-			 totalTime =(long) 0; 
+			totalTime =(long) 0; 
 			for(long l: timeh2){
 				totalTime+=l;
 			}
@@ -147,17 +144,54 @@ public class Driver {
 	}
 	public static void runh1(int[] input){
 		Board b = new Board(input, true, null, 0);
-		while(!b.isFinal() && b.isSolveable()){
-			
-		}
+		run( b);
 	}
+
 	public static void runh2(int[] input){
 		Board b = new Board(input, false, null, 0);
+		run ( b);
+	}
+	private static void run(Board b) {
+		path= new ArrayList <Board>();
+		step =0; 
+		b.printBoard();
+		while(!b.isFinal() && b.isSolveable()){
+			//b.printBoard(); 
+			b.addChildren(); 
+			path.add(b.getNextState());
+			step += b.getChildren().size();
+			b = b.getNextState(); 
+//			while (path.contains(b)){
+//				b.setNextState(); 
+//			}
+//			b = b.getNextState(); 
+		}
+		//b.printBoard(); 
+		//System.out.println("Step Count" + step);
 	}
 	public static void main(String[] args) throws FileNotFoundException {
 
-		fileInput(); 
-		System.out.println("HI " + averageTimeh1.get(2) + averageTimeh1.get(4));
+		Scanner sc = new Scanner(System.in);
+		System.out.println("How would you like to set up the puzzle? \nPlease select:\n1 for random Input \n2 to enter your own input \n3 for file input of 100 cases ranging from depth 2 to 20\n4 to exit");
+		int input =Integer.parseInt(sc.next());
+		if (input ==1){
+			int [] values = randomInput();
+			runh1(values);
+			runh2(values);
+		}
+		else if (input == 2){
+			int [] values = userInput();
+			runh1(values);
+			runh2(values);
+
+		}
+		else if (input == 3){
+			fileInput();
+		}
+		else if (input == 4){
+			System.out.println("Thank you for playing ");
+		}
+		
 	}
 
 }
