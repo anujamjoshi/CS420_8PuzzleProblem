@@ -158,16 +158,12 @@ public class Driver {
 		while(!b.isFinal() && b.isSolveable()){
 			//b.printBoard(); 
 			b.addChildren(); 
-			path.add(b.getNextState());
-			step += b.getChildren().size();
+			path.add(b);
+			b.setNextState(path);
+			
 			b = b.getNextState(); 
-//			while (path.contains(b)){
-//				b.setNextState(); 
-//			}
-//			b = b.getNextState(); 
+			step += b.getChildren().size();
 		}
-		//b.printBoard(); 
-		//System.out.println("Step Count" + step);
 	}
 	public static void main(String[] args) throws FileNotFoundException {
 

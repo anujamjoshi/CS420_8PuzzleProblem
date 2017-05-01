@@ -17,7 +17,7 @@ public class Board {
 	private int zeroRow; 
 	private int zeroCol;
 	private int gValue; 
-
+	
 
 	/**
 	 * @return the board
@@ -61,6 +61,17 @@ public class Board {
 	 */
 	public Board getNextState() {
 		return nextState;
+	}
+	/**
+	 * @param path the nextState to set
+	 */
+	public void setNextState(ArrayList<Board> path) {
+		Board next = getLowestCost(); 
+		while (path.contains(next)){
+			children.remove(next);
+			next = getLowestCost(); 
+		}
+		this.nextState= next; 
 	}
 	/**
 	 * takes in @param values as a one dimensional array 
@@ -144,7 +155,7 @@ public class Board {
 			}
 		}
 		int numInversion = inversion(list);
-		System.out.println(numInversion);
+		//System.out.println(numInversion);
 		return (numInversion%2) == 0; 
 	}
 	private int inversion(ArrayList<Integer> list) {
@@ -243,7 +254,7 @@ public class Board {
 			//int[][]values, boolean h1, Board p, int g
 			children.add(new Board(swap(zeroRow,zeroCol,zeroRow,zeroCol+1), this.h1, this, gValue+1));
 		}
-		this.nextState=this.getLowestCost();
+		//this.nextState=this.getLowestCost();
 	}
 	private int[][] swap (int r1, int c1, int r2, int c2){
 		int [][]tempBoard = new int[3][3];
@@ -283,6 +294,7 @@ public class Board {
 		}
 		return min;
 	}
+	
 
 
 }
